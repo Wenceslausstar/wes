@@ -1,36 +1,35 @@
 /*======== Window Load Function ========*/
-$(window).on("load", function () {
+window.addEventListener("load", function () {
   /*======== Preloader ========*/
-  $(".loader").fadeOut();
-  $(".preloader").delay(1000).fadeOut();
+  var loader = document.querySelector(".loader");
+  var loading = document.querySelector(".loading");
+  loader.style.display = "none";
+  setTimeout(function () {
+    loading.style.display = "none";
+  }, 1000);
 
   /*======== Isotope Portfolio Setup ========*/
-  if ($(".portfolio-items").length) {
-    var $elements = $(".portfolio-items"),
-      $filters = $(".portfolio-filter ul li");
-    $elements.isotope();
+  var portfolioItems = document.querySelector(".portfolio-items");
+  if (portfolioItems) {
+    var elements = document.querySelector(".portfolio-items");
+    var filters = document.querySelectorAll(".portfolio-filter ul li");
+    var iso = new Isotope(elements);
 
-    $filters.on("click", function () {
-      $filters.removeClass("active");
-      $(this).addClass("active");
-      var selector = $(this).data("filter");
-      $(".portfolio-items").isotope({
-        filter: selector,
-        hiddenStyle: {
-          transform: "scale(.2) skew(30deg)",
-          opacity: 0,
-        },
-        visibleStyle: {
-          transform: "scale(1) skew(0deg)",
-          opacity: 1,
-        },
-        transitionDuration: ".5s",
+    filters.forEach(function (filter) {
+      filter.addEventListener("click", function () {
+        filters.forEach(function (f) {
+          f.classList.remove("active");
+        });
+        this.classList.add("active");
+        var selector = this.getAttribute("data-filter");
+        iso.arrange({ filter: selector });
       });
     });
   }
 
   /*======== Blogs Masonry Setup ========*/
-  if ($(".blogs-masonry").length) {
+  var blogsMasonry = document.querySelector(".blogs-masonry");
+  if (blogsMasonry) {
     var macy = Macy({
       container: ".blogs-masonry",
       trueOrder: true,
@@ -50,24 +49,21 @@ $(window).on("load", function () {
 });
 
 /*======== Document Ready Function ========*/
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
   "use strict";
 
   /*======== SimpleBar Setup ========*/
-  $(".pt-page").each(function () {
-    var $id = "#" + $(this).attr("id");
-    new SimpleBar($($id)[0]);
+  var ptPages = document.querySelectorAll(".pt-page");
+  ptPages.forEach(function (page) {
+    var id = "#" + page.getAttribute("id");
+    new SimpleBar(document.querySelector(id));
   });
 
-  $(document).on("mouseup", function (e) {
-    var headerContainer = $(".header-main");
+  document.addEventListener("mouseup", function (e) {
+    var headerContainer = document.querySelector(".header-main");
 
-    if (
-      !headerContainer.is(e.target) &&
-      headerContainer.has(e.target).length === 0 &&
-      $(e.target).closest(".header-toggle").length === 0
-    ) {
-      $(".header-content").removeClass("on");
+    if (!headerContainer.contains(e.target) && !e.target.closest(".toggle")) {
+      document.querySelector(".header-content").classList.remove("on");
     }
   });
 
@@ -79,144 +75,205 @@ $(document).ready(function () {
   });
 
   /*======== Active Current Link ========*/
-  $(".nav-menu a").on("click", function () {
-    if ($(".header-content.on").length) {
-      $(".header-content").removeClass("on");
-    }
+  var navMenuLinks = document.querySelectorAll(".nav-menu a");
+  navMenuLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+      if (document.querySelector(".header-content.on")) {
+        document.querySelector(".header-content").classList.remove("on");
+      }
+    });
   });
 
   /*======== Mobile Toggle Click Setup ========*/
-  $(".header-toggle").on("click", function () {
-    $(".header-content").toggleClass("on");
+  var headerToggle = document.querySelector(".toggle");
+  headerToggle.addEventListener("click", function () {
+    document.querySelector(".header-content").classList.toggle("on");
   });
 
-  /*========Clients OwlCarousel Setup========*/
-  $(".clients .owl-carousel").owlCarousel({
-    loop: true,
-    margin: 30,
-    autoplay: true,
-    smartSpeed: 500,
-    responsiveClass: true,
-    autoplayHoverPause: true,
-    dots: false,
-    responsive: {
-      0: {
-        items: 2,
+  /*======== Clients OwlCarousel Setup ========*/
+  var clientsCarousel = document.querySelector(".clients .owl-carousel");
+  if (clientsCarousel) {
+    var owl = new OwlCarousel(clientsCarousel, {
+      loop: true,
+      margin: 30,
+      autoplay: true,
+      smartSpeed: 500,
+      responsiveClass: true,
+      autoplayHoverPause: true,
+      dots: false,
+      responsive: {
+        0: {
+          items: 2,
+        },
+        500: {
+          items: 3,
+        },
+        700: {
+          items: 4,
+        },
+        1000: {
+          items: 6,
+        },
       },
-      500: {
-        items: 3,
-      },
-      700: {
-        items: 4,
-      },
-      1000: {
-        items: 6,
-      },
-    },
-  });
+    });
+  }
 
-  /*========Testimonials OwlCarousel Setup========*/
-  $(".testimonials .owl-carousel").owlCarousel({
-    loop: true,
-    margin: 30,
-    autoplay: true,
-    smartSpeed: 500,
-    responsiveClass: true,
-    dots: false,
-    autoplayHoverPause: true,
-    responsive: {
-      0: {
-        items: 1,
+  /*======== Testimonials OwlCarousel Setup ========*/
+  var testimonialsCarousel = document.querySelector(
+    ".testimonials .owl-carousel"
+  );
+  if (testimonialsCarousel) {
+    var owl = new OwlCarousel(testimonialsCarousel, {
+      loop: true,
+      margin: 30,
+      autoplay: true,
+      smartSpeed: 500,
+      responsiveClass: true,
+      dots: false,
+      autoplayHoverPause: true,
+      responsive: {
+        0: {
+          items: 1,
+        },
+        800: {
+          items: 1,
+        },
+        1000: {
+          items: 2,
+        },
       },
-      800: {
-        items: 1,
-      },
-      1000: {
-        items: 2,
-      },
-    },
-  });
+    });
+  }
 
   /*======== Skills Progress Animation ========*/
-  if ($(".skills").length > 0) {
+  var skills = document.querySelector(".skills");
+  if (skills) {
+    var progressBars = document.querySelectorAll(".progress .progress-bar");
     var el = new SimpleBar(
-      $("#resume .simplebar-content-wrapper")[0]
+      document.querySelector("#resume .simplebar-content-wrapper")
     ).getScrollElement();
 
-    //When scrolled to Progress
-    $(el).on("scroll", function () {
+    function animateProgress() {
+      progressBars.forEach(function (progressBar) {
+        var bottom_object = progressBar.offsetTop + progressBar.offsetHeight;
+        var bottom_window = window.scrollY + window.innerHeight;
+        var progressWidth =
+          progressBar.getAttribute("data-progress-value") + "%";
+        if (bottom_window > bottom_object) {
+          progressBar.style.width = progressWidth;
+          var progressValue = progressBar.querySelector(".progress-value");
+          var countNum = parseInt(progressWidth, 10);
+          var step = function () {
+            progressValue.textContent = Math.floor(this.countNum) + "%";
+          };
+          var complete = function () {
+            progressValue.textContent = this.countNum + "%";
+          };
+          $({ countNum: 0 }).animate(
+            { countNum: countNum },
+            {
+              duration: 2000,
+              easing: "swing",
+              step: step,
+              complete: complete,
+            }
+          );
+        }
+      });
+    }
+
+    el.addEventListener("scroll", function () {
       animateProgress();
     });
 
-    //When Resume Section have page-active on page load
-    if ($("#resume").hasClass("page-active")) {
+    if (document.querySelector("#resume").classList.contains("page-active")) {
       animateProgress();
     }
 
-    //When Resume Link is clicked
-    $('a[href="#resume"]').on("click", function () {
-      animateProgress();
-    });
-
-    function animateProgress() {
-      $(".progress .progress-bar").each(function () {
-        var bottom_object = $(this).offset().top + $(this).outerHeight();
-        var bottom_window = $(window).scrollTop() + $(window).height();
-        var progressWidth = $(this).data("progress-value") + "%";
-        if (bottom_window > bottom_object) {
-          $(this).css({
-            width: progressWidth,
-          });
-          $(this)
-            .find(".progress-value")
-            .animate(
-              {
-                countNum: parseInt(progressWidth, 10),
-              },
-              {
-                duration: 2000,
-                easing: "swing",
-                step: function () {
-                  $(this).text(Math.floor(this.countNum) + "%");
-                },
-                complete: function () {
-                  $(this).text(this.countNum + "%");
-                },
-              }
-            );
-        }
+    var resumeLink = document.querySelector('a[href="#resume"]');
+    if (resumeLink) {
+      resumeLink.addEventListener("click", function () {
+        animateProgress();
       });
     }
   }
 
   /*======== Portfolio Image Link Setup ========*/
-  $(".portfolio-items .image-link").magnificPopup({
-    type: "image",
-    gallery: {
-      enabled: true,
-    },
+  var imageLinks = document.querySelectorAll(".portfolio-items .image-link");
+  imageLinks.forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      var gallery = new MagnificPopup(this, {
+        type: "image",
+        gallery: {
+          enabled: true,
+        },
+      });
+    });
   });
 
   /*======== Portfolio Video Link Setup ========*/
-  $(".portfolio-items .video-link").magnificPopup({
-    type: "iframe",
-    gallery: {
-      enabled: true,
-    },
+  var videoLinks = document.querySelectorAll(".portfolio-items .video-link");
+  videoLinks.forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      var gallery = new MagnificPopup(this, {
+        type: "iframe",
+        gallery: {
+          enabled: true,
+        },
+      });
+    });
   });
 
   /*======== Portfolio Ajax Link Setup ========*/
-  ajaxPortfolioSetup(
-    $(".portfolio-items .ajax-link"),
-    $(".ajax-portfolio-popup")
-  );
+  var ajaxLinks = document.querySelectorAll(".portfolio-items .ajax-link");
+  var ajaxContainer = document.querySelector(".ajax-portfolio-popup");
+  if (ajaxLinks.length > 0 && ajaxContainer) {
+    ajaxLinks.forEach(function (ajaxLink) {
+      ajaxLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        var link = this.getAttribute("href");
+        if (link === "#") {
+          return;
+        }
+        var contentWrap = ajaxContainer.querySelector(
+          ".content-wrap .popup-content"
+        );
+        contentWrap.innerHTML = "";
+        ajaxContainer.classList.add("on");
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", link, true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              contentWrap.innerHTML = xhr.responseText;
+            } else {
+              contentWrap.innerHTML =
+                '<h1 class="text-center">Something went wrong! Retry or refresh the page.</h1>';
+            }
+            ajaxContainer.querySelector(".ajax-loader").style.display = "none";
+          }
+        };
+        xhr.send();
+      });
+    });
+
+    var popupClose = ajaxContainer.querySelector(".popup-close");
+    popupClose.addEventListener("click", function () {
+      ajaxContainer.classList.remove("on");
+    });
+  }
 
   /*======== Portfolio Tilt Setup ========*/
-  $("#portfolio .item figure").tilt({
-    maxTilt: 3,
-    glare: true,
-    maxGlare: 0.6,
-    reverse: true,
+  var portfolioItems = document.querySelectorAll("#portfolio .item figure");
+  portfolioItems.forEach(function (item) {
+    var tilt = new Tilt(item, {
+      maxTilt: 3,
+      glare: true,
+      maxGlare: 0.6,
+      reverse: true,
+    });
   });
 
   /*======== Contact Form Setup ========*/
@@ -224,124 +281,139 @@ $(document).ready(function () {
 });
 
 /*********** Function Ajax Portfolio Setup **********/
-function ajaxPortfolioSetup($ajaxLink, $ajaxContainer) {
-  $ajaxLink.on("click", function (e) {
-    var link = $(this).attr("href");
-
-    if (link === "#") {
+function ajaxPortfolioSetup(ajaxLinks, ajaxContainer) {
+  ajaxLinks.forEach(function (ajaxLink) {
+    ajaxLink.addEventListener("click", function (e) {
+      var link = this.getAttribute("href");
+      if (link === "#") {
+        e.preventDefault();
+        return;
+      }
+      var contentWrap = ajaxContainer.querySelector(
+        ".content-wrap .popup-content"
+      );
+      contentWrap.innerHTML = "";
+      ajaxContainer.classList.add("on");
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", link, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            contentWrap.innerHTML = xhr.responseText;
+          } else {
+            contentWrap.innerHTML =
+              '<h1 class="text-center">Something went wrong! Retry or refresh the page.</h1>';
+          }
+          ajaxContainer.querySelector(".ajax-loader").style.display = "none";
+        }
+      };
+      xhr.send();
       e.preventDefault();
-      return;
-    }
-
-    $ajaxContainer.find(".content-wrap .popup-content").empty();
-
-    $ajaxContainer.addClass("on");
-    $.ajax({
-      url: link,
-      beforeSend: function () {
-        $ajaxContainer.find(".ajax-loader").show();
-      },
-      success: function (result) {
-        $ajaxContainer.find(".content-wrap .popup-content").html(result);
-      },
-      complete: function () {
-        $ajaxContainer.find(".ajax-loader").hide();
-      },
-      error: function (e) {
-        $ajaxContainer.find(".ajax-loader").hide();
-        $ajaxContainer
-          .find(".content-wrap .popup-content")
-          .html(
-            '<h1 class="text-center">Something went wrong! Retry or refresh the page.</h1>'
-          );
-      },
     });
-    e.preventDefault();
   });
 
-  $ajaxContainer.find(".popup-close").on("click", function () {
-    $ajaxContainer.removeClass("on");
+  var popupClose = ajaxContainer.querySelector(".popup-close");
+  popupClose.addEventListener("click", function () {
+    ajaxContainer.classList.remove("on");
   });
 }
 
-
 /********** Function Contact Form Setup **********/
 function contactFormSetup() {
-  /*======== Check Field Have Value When Page Load ========*/
-  $(".input__field").each(function () {
-    if ($(this).val()) {
-      $(this).parent(".input").addClass("input--filled");
+  var inputFields = document.querySelectorAll(".input__field");
+
+  inputFields.forEach(function (input) {
+    if (input.value) {
+      input.parentNode.classList.add("input--filled");
     } else {
-      $(this).parent(".input").removeClass("input--filled");
+      input.parentNode.classList.remove("input--filled");
     }
-  });
 
-  /*======== Check Field Have Value When Keyup ========*/
-  $(".input__field").on("keyup", function () {
-    if ($(this).val()) {
-      $(this).parent(".input").addClass("input--filled");
-    } else {
-      $(this).parent(".input").removeClass("input--filled");
-    }
-  });
-
-  $("#contact-form").on("submit", function (e) {
-    e.preventDefault();
-    var name = $("#cf-name").val(),
-      email = $("#cf-email").val(),
-      message = $("#cf-message").val(),
-      $messageBox = $("#contact-form .message"),
-      required = 0;
-
-    $(".cf-validate", this).each(function () {
-      if ($(this).val() == "") {
-        $(this).addClass("cf-error");
-        required += 1;
+    input.addEventListener("keyup", function () {
+      if (input.value) {
+        input.parentNode.classList.add("input--filled");
       } else {
-        if ($(this).hasClass("cf-error")) {
-          $(this).removeClass("cf-error");
-          if (required > 0) {
-            required -= 1;
-          }
-        }
+        input.parentNode.classList.remove("input--filled");
       }
     });
-    if (required === 0) {
-      $.ajax({
-        type: "POST",
-        url: "mail.php",
-        data: {
+  });
+
+  var contactForm = document.querySelector("#contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = document.querySelector("#cf-name").value;
+      var email = document.querySelector("#cf-email").value;
+      var message = document.querySelector("#cf-message").value;
+      var messageBox = document.querySelector("#contact-form .message");
+      var required = 0;
+
+      var cfInputs = document.querySelectorAll(".cf-validate");
+      cfInputs.forEach(function (input) {
+        if (!input.value) {
+          input.classList.add("cf-error");
+          required += 1;
+        } else {
+          if (input.classList.contains("cf-error")) {
+            input.classList.remove("cf-error");
+            if (required > 0) {
+              required -= 1;
+            }
+          }
+        }
+      });
+
+      if (required === 0) {
+        var data = {
           cf_name: name,
           cf_email: email,
           cf_message: message,
-        },
-        dataType: "json",
-        success: function (data) {
-          console.log(data);
-          showAlertBox(data.status, data.message);
-
-          if (data.status === 200) {
-            $("#contact-form .input__field").val("");
+        };
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "mail.php", true);
+        xhr.setRequestHeader(
+          "Content-type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.onload = function () {
+          var response = JSON.parse(xhr.responseText);
+          showAlertBox(response.status, response.message);
+          if (response.status === 200) {
+            inputFields.forEach(function (input) {
+              input.value = "";
+            });
           }
-        },
-        error: function (data) {
-          showAlertBox(data.status, data.message);
-        },
-      });
-    }
-  });
+        };
+        xhr.onerror = function () {
+          showAlertBox(
+            xhr.status,
+            "Something went wrong! Retry or refresh the page."
+          );
+        };
+        xhr.send("data=" + JSON.stringify(data));
+      }
+    });
+  }
 }
 
 /********** Function Show Alert Box **********/
 function showAlertBox(response, message) {
-  var $alertBox = $('<div class="alert"></div>'),
-    $alContainer = $("#contact-form .alert-container");
+  var alertBox = document.createElement("div");
+  var alContainer = document.querySelector("#contact-form .alert-container");
+  alertBox.className = "alert";
+  alertBox.textContent = message;
+
   if (response == 200) {
-    $alertBox.addClass("alert-success").html(message);
-    $alContainer.html($alertBox);
+    alertBox.classList.add("alert-success");
   } else {
-    $alertBox.addClass("alert-danger").html(message);
-    $alContainer.html($alertBox);
+    alertBox.classList.add("alert-danger");
   }
-  $alContainer.fadeIn(300).delay(4000).fadeOut(400);
+
+  alContainer.innerHTML = "";
+  alContainer.appendChild(alertBox);
+  alContainer.style.display = "block";
+
+  setTimeout(function () {
+    alContainer.style.display = "none";
+  }, 4000);
 }

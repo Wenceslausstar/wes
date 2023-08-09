@@ -1,6 +1,7 @@
 /*============ 1. Body and Core Css ============*/
 
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700,900");
+@import url("https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
 @import url("https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900");
 * {
   -webkit-box-sizing: border-box;
@@ -36,7 +37,7 @@ body {
 
 body {
   font-size: 16px;
-  font-family: "Roboto", sans-serif;
+  font-family: "lobster";
   line-height: 1.65;
   color: #e1e1e1;
   background-color: #6b6c6d;
@@ -48,7 +49,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Playfair Display", serif;
+  font-family: "lobster";
   color: #ffffff;
 }
 
@@ -433,7 +434,7 @@ a:focus {
 
 /*============= 2. Helper  ==================*/
 
-/********** Heading **********/
+/* Heading styling ***/
 
 .page-heading {
   margin-bottom: 50px;
@@ -451,13 +452,13 @@ a:focus {
 
 .page-heading h2 {
   font-size: 36px;
+  color: #ffffff;
+  position: relative;
+  display: inline-block;
   font-weight: 700;
   letter-spacing: 1.5px;
   line-height: 1em;
   text-transform: capitalize;
-  color: #ffffff;
-  position: relative;
-  display: inline-block;
 }
 
 .subheading {
@@ -468,16 +469,15 @@ a:focus {
 
 .subheading h3 {
   display: inline-block;
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1em;
   letter-spacing: 0.5px;
   position: relative;
   text-transform: uppercase;
   padding: 5px 10px;
   border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1em;
 }
-
 .subheading h3:before,
 .subheading h3:after {
   position: absolute;
@@ -663,7 +663,7 @@ blockquote {
 
 /********** Preloader **********/
 
-.preloader {
+.loading {
   position: fixed;
   top: 0;
   left: 0;
@@ -673,7 +673,7 @@ blockquote {
   z-index: 10000;
 }
 
-.preloader .loader {
+.loading .loader {
   position: absolute;
   top: 50%;
   width: 100%;
@@ -683,7 +683,7 @@ blockquote {
   text-align: center;
 }
 
-.preloader .loader h4 {
+.loading .loader h4 {
   text-transform: uppercase;
   margin-bottom: 10px;
   font-weight: 700;
@@ -738,8 +738,8 @@ blockquote {
 }
 
 /*
- * Animation keyframes
- * Use transition opacity instead of keyframes?
+
+ * Using transition opacity 
  */
 
 @-webkit-keyframes loading {
@@ -1755,7 +1755,12 @@ header .header-mobile .header-toggle i {
   letter-spacing: 0.5px;
 }
 
-.blog-page .blog-heading h1 {
+.blog-page {
+  font-size: 40px;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+.blog-heading h1 {
   font-size: 40px;
   margin-bottom: 6px;
   letter-spacing: 0.5px;
